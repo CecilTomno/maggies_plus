@@ -10,7 +10,7 @@ Open the index.html file in a browser, or serve this folder over HTTP:
 
 Then visit http://localhost:4173.
 
-The fonts and catalogue photography load from Google Fonts and Unsplash, so those visual assets need an internet connection. The hero video and profile logo are stored locally in assets/.
+Fonts load from Google Fonts. Product and feature images are labeled placeholders; the hero video and profile logo are stored locally in assets/.
 
 ## Shop details
 
@@ -22,4 +22,4 @@ The fonts and catalogue photography load from Google Fonts and Unsplash, so thos
 
 ## Before launch
 
-The product names, photos, and sample prices are illustrative preview content, not live inventory. Replace them with confirmed items, photos, sizes, and prices. Confirm any payment instructions with the shop before adding them to the website.
+Product names and sample prices are illustrative preview content, not live inventory. Replace the photo placeholders and sample details with confirmed items, photos, sizes, and prices. Confirm any payment instructions with the shop before adding them to the website.

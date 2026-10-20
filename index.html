@@ -50,6 +50,7 @@
     .hero { position: relative; isolation: isolate; overflow: hidden; width: 100%; min-height: calc(100vh - 115px); min-height: max(560px, calc(100svh - 115px)); max-height: 960px; margin: 0; padding: 72px max(24px, calc((100vw - 1440px) / 2 + 40px)); display: flex; align-items: center; background: #51463d; color: #fbf8f2; }
     .hero::before { content: ""; position: absolute; z-index: 2; inset: 0; background: linear-gradient(90deg, rgba(25,22,20,.82) 0%, rgba(25,22,20,.66) 31%, rgba(25,22,20,.28) 62%, rgba(25,22,20,.12) 100%), linear-gradient(0deg, rgba(25,22,20,.38), transparent 33%); pointer-events: none; }
     .hero-poster, .hero-video { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
+    .hero-poster { background: radial-gradient(ellipse at 68% 42%, rgba(226,159,63,.32), transparent 42%), linear-gradient(125deg, #241d18, #76502d 58%, #36241c); }
     .hero-video { z-index: 1; background: #51463d; }
     .hero-video[hidden] { display: none; }
     .hero-copy { position: relative; z-index: 3; max-width: 620px; padding: 0; color: #fbf8f2; }
@@ -86,11 +87,14 @@
     .filter:hover, .filter[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: white; }
     .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px 18px; }
     .product-card { min-width: 0; }
-    .product-image { position: relative; aspect-ratio: .78; overflow: hidden; background: #e4dbce; }
-    .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-    .product-card:hover .product-image img { transform: scale(1.045); }
+    .product-image { position: relative; aspect-ratio: .78; overflow: hidden; background: #f2e5d1; }
+    .photo-placeholder { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; background: linear-gradient(145deg, #f7ebd8, #ead4b2); color: #70583b; }
+    .photo-placeholder::before { content: ""; position: absolute; inset: 14px; border: 1px dashed rgba(112,88,59,.45); pointer-events: none; }
+    .placeholder-frame { position: relative; padding: 10px 13px; border: 1px dashed rgba(112,88,59,.55); font-size: 8px; font-weight: 600; letter-spacing: .13em; line-height: 1.6; text-align: center; text-transform: uppercase; }
+    .curve-photo .photo-placeholder { background: linear-gradient(145deg, #f3dfbd, #e7c898); }
+    .product-card:hover .photo-placeholder { background: linear-gradient(145deg, #f8eedf, #efd8b3); }
     .product-label { position: absolute; top: 11px; left: 11px; padding: 7px 8px; background: var(--paper-light); color: var(--clay-dark); font-size: 8px; letter-spacing: .12em; text-transform: uppercase; }
-    .product-index { position: absolute; right: 11px; bottom: 11px; color: white; text-shadow: 0 1px 8px rgba(0,0,0,.7); font-size: 9px; letter-spacing: .12em; }
+    .product-index { position: absolute; right: 11px; bottom: 11px; color: rgba(36,29,24,.72); font-size: 9px; letter-spacing: .12em; }
     .product-info { padding: 14px 1px 0; }
     .product-topline { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
     .product-title { margin: 0; font: 500 19px/1.2 var(--serif); }
@@ -256,8 +260,8 @@
 
   <main id="top">
     <section class="hero wrap" aria-labelledby="hero-title">
-      <img class="hero-poster" src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&amp;fit=crop&amp;w=2000&amp;q=88" alt="" aria-hidden="true" fetchpriority="high">
-      <video class="hero-video" id="hero-video" muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&amp;fit=crop&amp;w=2000&amp;q=88" aria-hidden="true" tabindex="-1">
+      <div class="hero-poster" aria-hidden="true"></div>
+      <video class="hero-video" id="hero-video" muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
         <source src="assets/videos/maggies-plus-hero.mp4" type="video/mp4">
       </video>
       <div class="hero-copy">
@@ -298,7 +302,7 @@
     </section>
 
     <section class="curve-feature wrap" id="curve" aria-labelledby="curve-title">
-      <div class="curve-photo"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Fashion portrait representing the plus-size style edit" loading="lazy"></div>
+      <div class="curve-photo"><div class="photo-placeholder feature-placeholder" role="img" aria-label="Feature photo placeholder"><span class="placeholder-frame">Feature photo placeholder</span></div></div>
       <div class="curve-copy">
         <p class="eyebrow">A little more room to shine</p>
         <h2 id="curve-title">Made for<br>your moment.</h2>
@@ -382,22 +386,18 @@
     updateHeroPlayback();
 
     const demoItems = [
-      { name: "Golden hour maxi", category: "Dresses", plus: true, price: "KSh 2,800", image: "photo-1515886657613-9f3515b0c78f", alt: "Fashion portrait in a vivid pink outfit", label: "PLUS SIZE · DEMO" },
-      { name: "Soft-focus blouse", category: "Tops", plus: true, price: "KSh 1,900", image: "photo-1529139574466-a303027c1d8b", alt: "Editorial fashion portrait in a layered outfit", label: "PLUS SIZE · DEMO" },
-      { name: "Easy wide-leg trouser", category: "Bottoms", plus: true, price: "KSh 2,400", image: "photo-1541099649105-f69ad21f3246", alt: "Denim fashion detail", label: "PLUS SIZE · DEMO" },
-      { name: "Weekend wrap dress", category: "Dresses", plus: true, price: "KSh 3,200", image: "photo-1483985988355-763728e1935b", alt: "Fashion styling in a boutique setting", label: "PLUS SIZE · DEMO" },
-      { name: "The curve knit", category: "Tops", plus: true, price: "KSh 2,600", image: "photo-1524504388940-b1c1722653e1", alt: "Fashion portrait in a softly styled look", label: "PLUS SIZE · DEMO" },
-      { name: "Everyday midi dress", category: "Dresses", plus: true, price: "KSh 2,900", image: "photo-1539109136881-3be0616acf4b", alt: "Editorial fashion portrait in a neutral outfit", label: "PLUS SIZE · DEMO" },
-      { name: "Soft Sunday set", category: "Sets", plus: true, price: "KSh 3,500", image: "photo-1525507119028-ed4c629a60a3", alt: "Thoughtful wardrobe styling", label: "PLUS SIZE · DEMO" },
-      { name: "The forever shirt", category: "Tops", plus: true, price: "KSh 1,800", image: "photo-1523398002811-999ca8dec234", alt: "Relaxed casual fashion look", label: "PLUS SIZE · DEMO" }
+      { name: "Golden hour maxi", category: "Dresses", plus: true, price: "KSh 2,800", label: "PLUS SIZE · DEMO" },
+      { name: "Soft-focus blouse", category: "Tops", plus: true, price: "KSh 1,900", label: "PLUS SIZE · DEMO" },
+      { name: "Easy wide-leg trouser", category: "Bottoms", plus: true, price: "KSh 2,400", label: "PLUS SIZE · DEMO" },
+      { name: "Weekend wrap dress", category: "Dresses", plus: true, price: "KSh 3,200", label: "PLUS SIZE · DEMO" },
+      { name: "The curve knit", category: "Tops", plus: true, price: "KSh 2,600", label: "PLUS SIZE · DEMO" },
+      { name: "Everyday midi dress", category: "Dresses", plus: true, price: "KSh 2,900", label: "PLUS SIZE · DEMO" },
+      { name: "Soft Sunday set", category: "Sets", plus: true, price: "KSh 3,500", label: "PLUS SIZE · DEMO" },
+      { name: "The forever shirt", category: "Tops", plus: true, price: "KSh 1,800", label: "PLUS SIZE · DEMO" }
     ];
     const grid = document.querySelector("#product-grid");
     const filters = [...document.querySelectorAll(".filter")];
     let activeFilter = "all";
-
-    function imageUrl(photo, width = 900) {
-      return `https://images.unsplash.com/${photo}?auto=format&fit=crop&w=${width}&q=82`;
-    }
 
     function enquiryUrl(item) {
       const text = `Hi Maggie’s Plus, I saw the style preview listing “${item.name}” on your website. Could you please share what’s currently available in a similar style, including the actual price, measurements and delivery options?`;
@@ -419,11 +419,15 @@
         card.className = "product-card";
         const image = document.createElement("div");
         image.className = "product-image";
-        const photo = document.createElement("img");
-        photo.src = imageUrl(item.image);
-        photo.alt = item.alt;
-        photo.loading = "lazy";
-        image.append(photo);
+        const photoPlaceholder = document.createElement("div");
+        photoPlaceholder.className = "photo-placeholder";
+        photoPlaceholder.setAttribute("role", "img");
+        photoPlaceholder.setAttribute("aria-label", item.category + " photo placeholder");
+        const placeholderText = document.createElement("span");
+        placeholderText.className = "placeholder-frame";
+        placeholderText.textContent = "Product photo placeholder";
+        photoPlaceholder.append(placeholderText);
+        image.append(photoPlaceholder);
         const tag = document.createElement("span");
         tag.className = "product-label";
         tag.textContent = item.label;
